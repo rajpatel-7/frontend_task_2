@@ -70,6 +70,7 @@ namespace frontend_task_2.Services
                         return (default, errObj["error"]);
                     }
                 }
+            catch
                 { 
                     // If we can't parse it as a dict, just return the raw string to see what the server is unhappy about
                     return (default, $"API returned: {response.StatusCode} - {responseContent}");
