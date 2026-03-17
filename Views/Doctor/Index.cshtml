@@ -1,0 +1,97 @@
+@model List<frontend_task_2.Models.DoctorQueueItem>
+@{
+    ViewData["Title"] = "Doctor Queue";
+}
+
+<div class="row mt-4 mb-3">
+    <div class="col-12">
+        <h2 class="text-primary"><i class="bi bi-people"></i> Today's Queue</h2>
+        <p class="text-muted">Examine patient and give medicine</p>
+
+
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+
+
+
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+
+
+                <thead class="table-primary">
+                    <tr>
+                        <th class="ps-4">Token</th>
+                        <th>Patient Name</th>
+
+
+                        <th>Appt ID</th>
+                        <th>Status</th>
+                        <th class="pe-4 text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var normStatus = item.Status?.Trim().Replace(" ", "-").Replace("_", "-").ToLower() ?? "";
+
+
+                        <tr>
+                            <td class="ps-4"><span class="fw-bold fs-5 border border-primary rounded px-2">@item.TokenNumber</span></td>
+                            <td class="align-middle fw-medium">@item.PatientName</td>
+                            <td class="align-middle">@item.AppointmentId</td>
+                            <td class="align-middle">
+                                @if (normStatus == "waiting") {
+
+
+                                    <span class="badge bg-warning text-dark">Waiting</span>
+                                } else if (normStatus == "in-progress") {
+                                    <span class="badge bg-primary">In Progress</span>
+                                } else if (normStatus == "done") {
+                                    <span class="badge bg-success">Done</span>
+
+
+                                } else {
+                                    <span class="badge bg-secondary">@item.Status</span>
+                                }
+                            </td>
+                            <td class="pe-4 text-end align-middle">
+                                    <a asp-action="AddPrescription" asp-route-appointmentId="@item.AppointmentId" class="btn btn-sm btn-outline-success me-1">
+                                        <i class="bi bi-prescription"></i> Give Medicine (Rx)
+
+
+                                    </a>
+                                    <a asp-action="AddReport" asp-route-appointmentId="@item.AppointmentId" class="btn btn-sm btn-outline-info">
+                                        Write Report
+                                    </a>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+
+
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <h5>No patients for today.</h5>
+                            </td>
+
+
+
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+

@@ -1,0 +1,96 @@
+@model List<frontend_task_2.Models.ClinicUser>
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var clinic = ViewBag.Clinic as frontend_task_2.Models.ClinicInfo;
+}
+
+<div class="row mt-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <h2>Admin Dashboard</h2>
+        <a asp-action="CreateUser" class="btn btn-success">+ Add New User</a>
+    </div>
+</div>
+
+@if (clinic != null)
+{
+    // (Show clinic stats)
+    <div class="row mt-4 mb-5">
+        
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3 shadow">
+                <div class="card-body">
+                    <h5 class="card-title">@clinic.Name (@clinic.Code)</h5>
+                    <p class="card-text">Total Users: @clinic.UserCount</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3 shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Appointments</h5>
+                    <p class="card-text h4">@clinic.AppointmentCount</p>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3 shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Queue Count</h5>
+                    <p class="card-text h4">@clinic.QueueCount</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h4 class="card-title">Staff and Patients</h4>
+
+
+        <div class="table-responsive">
+            <table class="table table-hover mt-3">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.Name</td>
+                            <td>@user.Email</td>
+                            <td><span class="badge bg-secondary">@user.Role</span></td>
+                            <td>@user.Phone</td>
+                            <td>@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+
+
+
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+
+                            <td colspan="5" class="text-center text-muted">No users found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

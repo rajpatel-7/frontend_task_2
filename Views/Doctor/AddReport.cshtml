@@ -1,0 +1,75 @@
+@model frontend_task_2.Models.AddReportRequest
+@{
+    ViewData["Title"] = "Add Medical Report";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card shadow border-0 border-top border-info border-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+
+
+                    <h4 class="m-0 text-info">Patient Report</h4>
+                    <span class="badge bg-light text-dark border">Appointment ID: @ViewBag.AppointmentId</span>
+
+
+                </div>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger shadow-sm">
+                        @ViewBag.Error
+                    </div>
+                }
+
+
+
+                <form asp-action="AddReport" method="post">
+                    <input type="hidden" name="appointmentId" value="@ViewBag.AppointmentId" />
+                    
+                    <div class="mb-4">
+                        <label asp-for="Diagnosis" class="form-label fw-bold">Diagnosis</label>
+
+
+                        <input asp-for="Diagnosis" class="form-control form-control-lg" required placeholder="e.g. Viral Fever" />
+                    </div>
+
+
+
+                    <div class="mb-4">
+                        <label asp-for="TestRecommended" class="form-label fw-bold">Test Recommended</label>
+                        <input asp-for="TestRecommended" class="form-control" placeholder="e.g. Complete Blood Count (CBC)" />
+
+
+                    </div>
+
+                    <div class="mb-4">
+
+
+                        <label asp-for="Remarks" class="form-label fw-bold">Remarks</label>
+                        <textarea asp-for="Remarks" class="form-control" rows="4" placeholder="Rest for 3 days and drink plenty of water."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-5">
+
+
+                        <a asp-action="Index" class="btn btn-light btn-lg border px-4">Cancel</a>
+                        <button type="submit" class="btn btn-info btn-lg px-5 text-white">Save Report</button>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

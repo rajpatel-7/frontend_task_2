@@ -1,0 +1,114 @@
+@model List<frontend_task_2.Models.QueueEntry>
+@{
+    ViewData["Title"] = "Receptionist Queue";
+    var selectedDate = ViewBag.SelectedDate as string;
+}
+
+<div class="row mt-4 mb-4">
+    <div class="col-8">
+        <h2>Today's Queue</h2>
+
+
+    </div>
+    <div class="col-4">
+        <!--  (Facility to change date and view) -->
+        <form method="get" asp-action="Index" class="d-flex">
+
+
+
+            <input type="date" name="date" class="form-control me-2" value="@selectedDate" />
+
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+    </div>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger shadow-sm">
+        @TempData["Error"]
+    </div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                           <thead class="table-dark">
+                    <tr>
+                        <th>Token #</th>
+                        <th>Appt ID</th>
+                                     <th>Patient Name</th>
+                        <th>Phone</th>
+                                 <th>Status</th>
+                         <th>Actions</th>
+                    </tr>
+                </thead>
+                         <tbody>
+                    @foreach (var item in Model.OrderBy(x => x.TokenNumber))
+                    {
+                        var normStatus = item.Status?.Trim().Replace(" ", "-").Replace("_", "-").ToLower() ?? "";
+                        <tr>
+                                      <td><span class="fs-4 fw-bold">@item.TokenNumber</span></td>
+                            <td class="align-middle fw-medium text-secondary">#@item.AppointmentId</td>
+                            <td class="align-middle fw-medium">@(item.Appointment?.Patient?.Name ?? "N/A")</td>
+                            <td>@(item.Appointment?.Patient?.Phone ?? "N/A")</td>
+                            <td>
+                                @if (normStatus == "waiting") {
+                                                <span class="badge bg-warning text-dark">Waiting</span>
+                                } else if (normStatus == "in-progress") {
+                                    <span class="badge bg-primary">In Progress</span>
+                                } else if (normStatus == "done") {
+                                          <span class="badge bg-success">Done</span>
+                                                 } else if (normStatus == "skipped") {
+                                    <span class="badge bg-danger">Skipped</span>
+                                } else {
+                                    <span class="badge bg-secondary">@item.Status</span>
+                                }
+                            </td>
+                            <td>
+                                <!--(Buttons to update status) -->
+                                @if (normStatus == "waiting")
+                                {
+                                    <form method="post" asp-action="UpdateStatus" class="d-inline">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                                   <input type="hidden" name="status" value="in_progress" />
+                                        <input type="hidden" name="date" value="@selectedDate" />
+                                                 <button type="submit" class="btn btn-sm btn-primary">Start</button>
+                                              </form>
+                                    <form method="post" asp-action="UpdateStatus" class="d-inline">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                        <input type="hidden" name="status" value="skipped" />
+                                               <input type="hidden" name="date" value="@selectedDate" />
+                                                 <button type="submit" class="btn btn-sm btn-danger">Skip</button>
+                                    </form>
+                                }
+                                else if (normStatus == "in-progress")
+                                {
+                                    <form method="post" asp-action="UpdateStatus" class="d-inline">
+                                                    <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="status" value="done" />
+                                                     <input type="hidden" name="date" value="@selectedDate" />
+                                        <button type="submit" class="btn btn-sm btn-success">Mark as Done</button>
+                                     </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No actions</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                No queue found for this date
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

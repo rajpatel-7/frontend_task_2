@@ -1,0 +1,79 @@
+@model List<frontend_task_2.Models.Appointment>
+@{
+    ViewData["Title"] = "My Appointments";
+}
+
+<div class="d-flex justify-content-between align-items-center mt-4 m-3">
+    <h2>My Appointments</h2>
+    <div>
+        <a asp-action="Prescriptions" class="btn btn-outline-info me-2">Prescriptions</a>
+        <a asp-action="Reports" class="btn btn-outline-warning me-2">Reports</a>
+
+
+        <a asp-action="BookAppointment" class="btn btn-primary">+ Book Appointment</a>
+    </div>
+
+
+</div>
+
+<div class="row">
+    @foreach (var appt in Model.OrderByDescending(x => x.AppointmentDate))
+
+
+
+    {
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-light d-flex justify-content-between">
+
+
+                    <strong>@appt.AppointmentDate</strong>
+                    <span class="badge bg-secondary">@appt.TimeSlot</span>
+                </div>
+
+
+                <div class="card-body">
+                    <p class="mb-1"><strong>Status:</strong> @appt.Status</p>
+                    
+                    @if (appt.QueueEntry != null)
+
+
+                    {
+                        <hr />
+                        <h6 class="text-muted">Queue Information</h6>
+                        <p class="mb-1"><strong>Token #:</strong> <span class="badge bg-primary fs-6">@appt.QueueEntry.TokenNumber</span></p>
+
+
+
+
+                        <p class="mb-0"><strong>Queue Status:</strong> 
+
+
+                            @if(appt.QueueEntry.Status == "done") {
+                                <span class="text-success fw-bold">Done</span>
+
+
+                            } else if (appt.QueueEntry.Status == "waiting") {
+
+
+                                <span class="text-warning fw-bold">Waiting</span>
+                            } else {
+                                <span class="text-info fw-bold">@appt.QueueEntry.Status</span>
+                            }
+                        </p>
+                    }
+                </div>
+                <div class="card-footer bg-white text-end">
+             <a asp-action="Details" asp-route-id="@appt.Id" class="btn btn-sm btn-outline-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="col-12 mt-4 text-center text-muted">
+   <h4>You don't have any appointments.</h4>
+        </div>
+    }
+</div>

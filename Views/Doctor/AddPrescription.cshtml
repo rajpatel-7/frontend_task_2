@@ -1,0 +1,112 @@
+@model frontend_task_2.Models.AddPrescriptionRequest
+@{
+    ViewData["Title"] = "Add Prescription";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <div class="card shadow border-0 border-top border-success border-4">
+
+
+            <div class="card-body p-4">
+
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="m-0 text-success">Write Prescription</h4>
+                    <span class="badge bg-light text-dark border">Appointment ID: @ViewBag.AppointmentId</span>
+
+
+                </div>
+
+                @if (ViewBag.Error != null)
+                {
+
+
+                    <div class="alert alert-danger shadow-sm">
+                        @ViewBag.Error
+                    </div>
+                }
+
+                <form asp-action="AddPrescription" method="post">
+                    <input type="hidden" name="appointmentId" value="@ViewBag.AppointmentId" />
+                    
+                    <div id="medicineList">
+                        <h6 class="text-muted border-bottom pb-2 mb-3">Medicines</h6>
+
+
+
+                        
+                        @for (int i = 0; i < Model.Medicines.Count; i++)
+                        {
+                            <div class="row g-2 align-items-center mb-3 medicine-row">
+                                <div class="col-md-4">
+                                    <input asp-for="Medicines[i].Name" class="form-control" placeholder="Medicine Name" required />
+
+
+                                </div>
+                                <div class="col-md-4">
+                                    <input asp-for="Medicines[i].Dosage" class="form-control" placeholder="Dosage (e.g. 500mg)" required />
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <input asp-for="Medicines[i].Duration" class="form-control" placeholder="Duration (e.g. 5 days)" required />
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <button type="button" class="btn btn-sm btn-outline-secondary mb-4" onclick="addMedicineRow()">
+
+
+
+                        + Add More
+                    </button>
+
+                    <div class="mb-4">
+
+
+
+
+                        <label asp-for="Notes" class="form-label fw-bold">Notes</label>
+
+                        <textarea asp-for="Notes" class="form-control" rows="3" placeholder="After meal, empty stomach etc..."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-light border">Cancel</a>
+                        <button type="submit" class="btn btn-success px-4">Save Prescription</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        //  (JS to add new medicine row)
+        function addMedicineRow() {
+
+            var container = document.getElementById("medicineList");
+            var rowCount = container.getElementsByClassName("medicine-row").length;
+            
+            var newRow = document.createElement("div");
+            newRow.className = "row g-2 align-items-center mb-3 medicine-row";
+            newRow.innerHTML = `
+                <div class="col-md-4">
+                    <input name="Medicines[${rowCount}].Name" class="form-control" placeholder="Medicine Name (દવાનું નામ)" required />
+                </div>
+                <div class="col-md-4">
+                    <input name="Medicines[${rowCount}].Dosage" class="form-control" placeholder="Dosage (e.g. 500mg)" required />
+                </div>
+                <div class="col-md-4">
+                    <input name="Medicines[${rowCount}].Duration" class="form-control" placeholder="Duration (e.g. 5 days)" required />
+                </div>
+            `;
+
+
+            container.appendChild(newRow);
+        }
+    </script>
+}

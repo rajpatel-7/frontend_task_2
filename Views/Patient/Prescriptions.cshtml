@@ -1,0 +1,53 @@
+@model List<frontend_task_2.Models.Prescription>
+@{
+    ViewData["Title"] = "My Prescriptions";
+}
+
+<div class="mt-4 mb-4 d-flex justify-content-between align-items-center">
+    <h3>My Prescriptions</h3>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
+</div>
+
+<div class="row">
+    @foreach (var p in Model)
+    {
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+               <strong>Prescription #@p.Id</strong>
+                </div>
+                <div class="card-body">
+                    <p><strong>Notes:</strong> @p.Notes</p>
+                 <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-secondary">
+                                <tr>
+                             <th>Medicine Name</th>
+                                    <th>Dosage</th>
+                                    <th>Duration</th>
+                             </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var m in p.Medicines)
+                                {
+                                    <tr>
+                                <td>@m.Name</td>
+                                    <td>@m.Dosage</td>
+                                  <td>@m.Duration</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+              </div>
+                </div>
+            </div>
+        </div>
+    }
+    
+    @if(!Model.Any())
+    {
+        <div class="col-12 mt-3 text-center text-muted">
+            <p>You have no prescriptions</p>
+        <div>
+    }
+</div>

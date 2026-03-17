@@ -1,0 +1,121 @@
+@model frontend_task_2.Models.Appointment
+@{
+    ViewData["Title"] = "Appointment Details";
+}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h3 class="mb-4">Appointment Details</h3>
+        
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white">        
+                <h5 class="mb-0">General Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">       
+
+
+                    <div class="col-md-4">
+
+                        <p class="mb-1 text-muted">Date</p>
+
+                        <p class="fw-bold fs-5">@Model.AppointmentDate</p>
+                    </div>
+                    <div class="col-md-4">
+
+
+
+                        <p class="mb-1 text-muted">Time Slot</p>
+
+                        <p class="fw-bold fs-5">@Model.TimeSlot</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="mb-1 text-muted">Status</p>
+                        <p class="fw-bold fs-5">
+                            <span class="badge bg-info">@Model.Status</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Prescription != null)
+        {
+            <!--  (Medicines details) -->
+
+            <div class="card shadow-sm mb-4 border-primary">
+
+
+                <div class="card-header bg-primary text-white d-flex justify-content-between">
+                    <h5 class="mb-0">Prescription</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3"><strong>Notes:</strong> @Model.Prescription.Notes</p>
+                    
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Medicine</th>
+                                <th>Dosage</th>
+
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var med in Model.Prescription.Medicines)
+                            {
+                                <tr>
+                                    <td>@med.Name</td>
+                                    <td>@med.Dosage</td>
+                                    <td>@med.Duration</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+        @if (Model.Report != null)
+        {
+            <!-- (Report details) -->
+            <div class="card shadow-sm mb-4 border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Medical Report</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+
+
+
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted">Diagnosis</h6>
+                            <p class="fw-bold">@Model.Report.Diagnosis</p>
+                        </div>
+
+
+
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted">Tests Recommended</h6>
+                            <p class="fw-bold">@Model.Report.TestRecommended</p>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-muted">Remarks</h6>
+                            <p class="fw-bold">@Model.Report.Remarks</p>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        }
+
+        <div class="mt-4 mb-5">
+            <a asp-action="Index" class="btn btn-secondary">Go Back</a>
+        </div>
+    </div>
+</div>
